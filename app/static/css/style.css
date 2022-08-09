@@ -257,10 +257,13 @@ section
  */
 .about {
     margin: 0;
+    width: 100%;
     display: flex;
 }
 .about-cap {
     padding: 20px;
+    width: 40%;
+    min-width: 400px;
 }
 .about-headline {
     margin: 0 20px 15px;
@@ -288,6 +291,9 @@ section
     border: 2px solid;
     border-color:darkorange;
     margin-top: 5px;
+    aspect-ratio: 5 / 3;
+    width: 30%;
+    height: 30%;
 }
 .about-description {
     margin: 0 0 20px;
@@ -307,6 +313,9 @@ topics
     line-height: 3;
     border-bottom: 3px double #8c8b8b;
     box-shadow: 0 10px 10px -10px #8c8b8b inset;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .topics-label {
     color: red;
@@ -407,6 +416,11 @@ recomend
     padding: 0;
     outline: 1px solid;
     outline-color: darksalmon;
+    aspect-ratio: 5 / 3;
+    max-width: 300px;
+    max-height: 180px;
+    width: 100%;
+    height: 100%;
 }
 .feature-description {
     margin: 0;
@@ -733,7 +747,6 @@ Cart Page
         padding: 5px;
         width: 120px;
     }
-    
     .header-signup {
         font-size: 12px;
         margin: 2px;
@@ -757,8 +770,15 @@ Cart Page
         display: block;
         text-align: center  ;
     }
-    .longurl {
-        word-break: break-all;
+    .about-cap {
+        width: 100%;
+    }
+    .about-img {
+        width: 400px;
+        height: 240px;
+    }
+    .topics-list {
+        font-size: 14px;
     }
     .grid {
         display: block;
