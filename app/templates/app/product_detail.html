@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load l10n %}
+{% load static %}
+{% block main %}
+    <div class="detail">
+        <div class="detail-left">
+            {% if object.stock == 0 %}
+            <label class="detail-label">品切れ</label>
+            {% endif %}
+            <img src="{{ object.image.url }}" width="300" height="180" alt="{{ object.name }}"> 
+            {% if object.stock > 0 %}
+            <a class="detail-cart" href="{% url 'cart:add_cart' product.id %}">カートに追加する</a>
+            {% else %}
+                <p class="detail-nostock">現在品切れ中です。</p>
+            {% endif %}
+        </div>
+        <div class="detail-right">
+            <p><time class="detail-time">更新日時：{{ object.updated|date:"Y/m/d" }}</time></p>
+            <h2 class="detail-h2">{{ object.name }}</h2>
+            {{ object.description|safe|linebreaksbr }}
+            <hr>
+                {% if object.stock > 0 %}
+                【在庫状況】	あと {{ object.stock }} 点
+                {% else %}
+                【在庫状況】	申し訳ございませんが現在品切れ中です。
+                {% endif %}
+            <hr>
+        </div>
+    </div>
+    <div class="detail">
+        <div class="detail-left">
+        </div>
+        <div class="detail-right">
+            <p class="page_top"><a href="#page_top" class="page_top_btn">↑このページの先頭へ</a></p>
+        </div>
+    </div>
+    <hr class="navbar-hr">
+
+{% endblock %}

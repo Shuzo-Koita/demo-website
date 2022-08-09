@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+    <section class="section section-3">
+        <h1 id="form" class="section-headline">お問い合わせフォーム</h1>
+        <p id="confirm" class="text-center" style="display: none;">下記の内容でよろしければ下部にある「送信」ボタンを押下してください。</p>
+        <form class="form" action="" method="POST">
+            {% csrf_token %}
+            <table class="form-table">
+                <tr>
+                    <th>
+                        <label for="category">
+                            お問い合わせ種別<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <select class="select required-field" name="category" id="category">
+                            <option value="" selected hidden>選択してください</option>
+                            <option value="1-ご注文に関するお問い合わせ">1. ご注文に関するお問い合わせ</option>
+                            <option value="2-商品に関するお問い合わせ">2. 商品に関するお問い合わせ</option>
+                            <option value="3-ご意見・ご要望">3. ご意見・ご要望</option>
+                            <option value="4-品質に問題のある商品の返品希望">4. 品質に問題のある商品の返品希望</option>
+                            <option value="5-その他のお問い合わせ">5. その他のお問い合わせ</option>
+                        </select>
+                        <span id="category-req" class="violation required-violation" style="display:none ;">・選択必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="name">
+                            お名前<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="text" id="name" name="name">
+                        <br/>例：小板　周造
+                        <span id="name-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="tel">
+                            お電話番号<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="tel" id="tel" name="tel">
+                        <br/>例：03-1234-5678
+                        <span id="tel-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="tel-format" class="violation format-violation" style="display:none ;">・電話番号の形式が不正です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="email">
+                            メールアドレス<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="email" id="email" name="email">
+                        <br/>例：jesus.loves.you@gmail.com
+                        <span id="email-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="email-format" class="violation format-violation" style="display:none ;">・メールアドレスの形式が不正です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="orderNumber">
+                            ご注文番号
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input" type="text" id="orderNumber" name="orderNumber">
+                        <br/>ご注文番号（例：sy-123456）をご入力ください。
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="detail">
+                            お問い合わせ内容<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <textarea class="textarea required-field" id="detail" cols="50" rows="10" name="detail"></textarea>
+                        <span id="detail-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-button text-center">
+                <a id="js-contact" href="#form" class="check-button">入力内容を確認する</a>
+                <a id="js-contact-mod" href="#form" class="check-button" style="display:none ;">修正</a>
+                <button id="button" class="button" name="contact" type="submit" style="display:none ;" disabled>送信</button>
+            </div>
+        </form>
+    </section>
+    <script src="{% static 'js/contact.js' %}"></script>
+{% endblock %}

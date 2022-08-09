@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load l10n %}
+{% block main %}
+<h1>トピックス</h1>
+{% if page_obj.paginator.num_pages > 0 %}
+    <p class="pagination">{{ page_obj.number }}/{{ page_obj.paginator.num_pages }}ページ</p>
+{% endif %}
+{% for post in object_list %}
+<div class="topicsList">
+    <div class="topicsList-left">
+        <p><time class="topics-time" datetime={{ post.updated|date:"Ymd" }}>{{ post.updated|date:"Y/m/d" }}</time></p>
+        <span class="topics-label">New</span>
+    </div>
+    <div class="topicsList-right">
+        <a class="topicsList-link" href="#{{ post.id }}"><h2 id="{{ post.id }}">{{ post.title }}</h2></a>
+        <div>
+            <p class="js-autolink">{{ post.body|safe|linebreaksbr }}</p>
+        </div>
+    </div>
+</div>
+<hr>
+{% endfor %}
+{% include "_pagination.html" %}
+<div class="topicsList">
+    <div class="topicsList-left">
+    </div>
+    <div class="topicsList-right">
+        <p class="page_top"><a href="#page_top" class="page_top_btn">↑このページの先頭へ</a></p>
+    </div>
+</div>
+{% endblock %}

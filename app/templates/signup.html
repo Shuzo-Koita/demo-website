@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+    <script src="{% static 'js/yubinbango.js' %}" charset="UTF-8"></script>
+    <section class="section section-3">
+        <h1 id="form" class="section-headline">新規会員登録</h1>
+        {% if error %}
+        <div class="text-center">
+            {{ error }}
+            <p>別のメールアドレスで登録をし直す場合は、大変お手数ですが下記のボタンを押下して再度登録をお願い致します。</p>
+            <a href="/signup" class="check-button">ユーザー登録をやり直す</a>
+        </div>
+        {% else %}
+        <p id="confirm" class="text-center" style="display: none;">下記の内容でよろしければ下部にある「登録」ボタンを押下してください。</p>
+        
+        <form class="form h-adr" action="" method="POST">
+            {% csrf_token %}
+            <table class="form-table">
+                <tr>
+                    <th>
+                        <label for="name">
+                            お名前<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="text" id="name" name="name">
+                        <br/>例：小板　周造
+                        <span id="name-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="furigana">
+                            フリガナ<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="text" id="furigana" name="furigana">
+                        <br/>例：コイタ　シュウゾウ
+                        <span id="furigana-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="furigana-format" class="violation format-violation" style="display:none ;">・全角カタカナで入力してください。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="postal">
+                            郵便番号<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <span class="p-country-name" style="display:none;">Japan</span>
+                        <input class="input p-postal-code required-field" type="text" id="postal" name="postal">
+                        <br/>例：1710021
+                        <br/>※郵便番号を入力すると住所が途中まで自動入力されます。
+                        <span id="postal-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="postal-format" class="violation format-violation" style="display:none ;">・7桁の半角数字またはハイフンで入力してください。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="pref_id">
+                            都道府県<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input p-region required-field" type="text" id="pref_id" name="pref_id">
+                        <span id="pref_id-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="address1">
+                            住所 1<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input p-locality p-street-address p-extended-address required-field" type="text" id="address1" name="address1">
+                        <br/>市区町村、番地等
+                        <span id="address1-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="address2">
+                            住所 2
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input" type="text" id="address2" name="address2">
+                        <br/>アパート・マンション名、部屋番号等
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="tel">
+                            お電話番号<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="tel" id="tel" name="tel">
+                        <br/>例：03-1234-5678
+                        <span id="tel-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="tel-format" class="violation format-violation" style="display:none ;">・電話番号の形式が不正です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="email">
+                            メールアドレス<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="email" id="email" name="email">
+                        <span id="email-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="email-format" class="violation format-violation" style="display:none ;">・メールアドレスの形式が不正です。</span>
+                        <br/>確認のためもう一度メールアドレスを入力してください。<br/>
+                        <input class="input required-field" type="email" id="email2" name="email2">
+                        <span id="email2-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="email-unmatch" class="violation unmatch-violation" style="display:none ;">・メールアドレスが一致しません。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="password">
+                            パスワード<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="password" id="password" name="password">
+                        <br/>※最低8文字以上24文字以内で大文字、小文字、数字、記号(.?/-)がそれぞれ1文字以上含まれている必要があります。
+                        <span id="password-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="password-format" class="violation format-violation" style="display:none ;">・パスワードの要件を満たしていません。</span>
+                        <br/>確認のためもう一度メールアドレスを入力してください。<br/>
+                        <input class="input required-field" type="password" id="password2" name="password2">
+                        <span id="password2-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="password-unmatch" class="violation unmatch-violation" style="display:none ;">・パスワードが一致しません。</span>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-button">
+                <a id="js-signup" href="#form" class="check-button">入力内容を確認する</a>
+                <a id="js-signup-mod" href="#form" class="check-button" style="display:none ;">修正</a>
+                <button id="button" class="button" name="signup" type="submit" style="display:none ;" disabled>登録</button>
+                <p id="message" name="message">{{ message }}</p>
+            </div>
+        </form>
+        {% endif %}
+    </section>
+    <script src="{% static 'js/signup.js' %}"></script>
+{% endblock %}

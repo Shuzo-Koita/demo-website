@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block main %}
+    <section class="section">
+        <h1 class="section-headline">西洋洋菓子店のこだわり</h1>
+        <figure class="about">
+            <img class="about-img" src="{% static 'images/cake-1971552_640.jpg' %}" width="400" height="240" alt="チョコレートケーキ">
+            <figcaption class="about-cap">
+                <hr class="hr">
+                <h2 class="about-headline">美味しさの秘訣</h2>
+                <p class="about-description">
+                    西洋洋菓子店は2022年で創業70周年を迎えた老舗の洋菓子店です。西洋洋菓子店では国産の厳選した素材のみを産地直送で使用しています。
+                    昔ながらの変わらない味を提供することはもちろん、今も新しい美味しさの追求を続けています。
+                    2022年ベストパティシエ賞受賞の天才が、数えきれない試行錯誤の末生み出した最高の製法で、一つ一つ丁寧に仕上げています。
+                </p>
+                <hr class="hr">
+            </figcaption>
+            <img class="about-img" src="{% static 'images/Patisserie.jpg' %}" width="400" height="240" alt="パティシエ">
+        </figure>
+    </section>
+    <section class="section section-2">
+        <div class="topics-listview">
+            <h1 class="section-headline">トピックス | TOPICS</h1>
+            <a href="/topics" class="topics-link">一覧表示</a>
+        </div>
+        <ul>
+            {% for post in object_list|slice:":5" %}
+            <li class="topics-list">
+                <article class="topics-article">
+                    <time class="topics-time" datetime={{ post.updated|date:"Ymd" }}>[{{ post.updated|date:"Y.m.d" }}]</time>
+                    <span class="topics-label">New</span>
+                    <a href="/topics#{{ post.id }}" class="topics-link"><span class="longurl"> ◇ {{ post.title }} ◇ {{ post.body| truncatechars:40 }}</span></a>
+                </article>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    <section class="section section-3">
+        <h1 class="section-headline">おすすめ商品</h1>
+        <ul class="grid grid-col-4">
+            <li class="grid-item">
+                <article class="card">
+                    <a href="/whole" class="card-link">
+                        <dl class="feature">
+                            <dt class="feature-headline">1. ホールケーキ</dt>
+                            <img class="feature-img" src="{% static 'images/wedding-cake-1704427_640.jpg' %}" width="300" height="180" alt="ホールケーキ">
+                            <dd class="feature-description">ウエディングケーキやバースデーケーキなど、大切な記念日を彩る特製ケーキをご用意しております。</dd>
+                        </dl>
+                    </a>
+                </article>
+            </li>
+            <li class="grid-item">
+                <article class="card">
+                    <a href="#" class="card-link">
+                        <dl class="feature">
+                            <dt class="feature-headline">2. ロールケーキ</dt>
+                            <img  class="feature-img" src="{% static 'images/strawberry-roll-1263099_640.jpg' %}" width="300" height="180" alt="ロールケーキ">
+                            <dd class="feature-description">大人気！具だくさんでしっとりと甘いクリームのロールケーキをお手頃価格でご提供しております。</dd>
+                        </dl>
+                    </a>
+                </article>
+            </li>
+            <li class="grid-item">
+                <article class="card">
+                    <a href="#" class="card-link">
+                        <dl class="feature">
+                            <dt class="feature-headline">3. マフィン</dt>
+                            <img class="feature-img" src="{% static 'images/cupcakes-2285209_640.jpg' %}" width="300" height="180" alt="マフィン">
+                            <dd class="feature-description">一口サイズのカップケーキです。特にバナナマフィンがおすすめ！</dd>
+                        </dl>
+                    </a>
+                </article>
+            </li>
+            <li class="grid-item">
+                <article class="card">
+                    <a href="#" class="card-link">
+                        <dl class="feature">
+                            <dt class="feature-headline">4. クッキー</dt>
+                            <img class="feature-img" src="{% static 'images/cookie-1864642_640.jpg' %}" width="300" height="180" alt="クッキー">
+                            <dd class="feature-description">季節に合わせた遊び心満載のデザインの色とりどりのクッキーです。</dd>
+                        </dl>
+                    </a>
+                </article>
+            </li>
+        </ul>
+    </section>
+    <script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

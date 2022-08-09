@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+    <script src="{% static 'js/yubinbango.js' %}" charset="UTF-8"></script>
+    <section class="section section-3">
+        <h1 id="form" class="section-headline">アカウント情報</h1>
+        <p id="edit" class="text-center">情報を更新する場合は編集を実施の上、下部の「入力内容の確認」ボタンを押下してください。</p>
+        <p id="confirm" class="text-center" style="display: none;">下記の内容でよろしければ下部にある「更新」ボタンを押下してください。</p>
+        <form class="form h-adr" action="" method="POST">
+            {% csrf_token %}
+            <table class="form-table">
+                <tr>
+                    <th>
+                        <label for="name">
+                            お名前<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="text" id="name" name="name" value="{{ user.profile.display_name }}">
+                        <br/>例：小板　周造
+                        <span id="name-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="furigana">
+                            フリガナ<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="text" id="furigana" name="furigana" value="{{ user.profile.furigana }}">
+                        <br/>例：コイタ　シュウゾウ
+                        <span id="furigana-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="furigana-format" class="violation format-violation" style="display:none ;">・全角カタカナで入力してください。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="postal">
+                            郵便番号<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <span class="p-country-name" style="display:none;">Japan</span>
+                        <input class="input p-postal-code required-field" type="text" id="postal" name="postal" value="{{ user.profile.postal }}">
+                        <br/>例：1710021
+                        <br/>※郵便番号を入力すると住所が途中まで自動入力されます。
+                        <span id="postal-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="postal-format" class="violation format-violation" style="display:none ;">・7桁の半角数字またはハイフンで入力してください。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="pref_id">
+                            都道府県<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input p-region required-field" type="text" id="pref_id" name="pref_id" value="{{ user.profile.pref_id }}">
+                        <span id="pref_id-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="address1">
+                            住所 1<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input p-locality p-street-address p-extended-address required-field" type="text" id="address1" name="address1" value="{{ user.profile.address1 }}">
+                        <br/>市区町村、番地等
+                        <span id="address1-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="address2">
+                            住所 2
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input" type="text" id="address2" name="address2" value="{{ user.profile.address2 }}">
+                        <br/>アパート・マンション名、部屋番号等
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="tel">
+                            お電話番号<span class="required">必須</span>
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input required-field" type="tel" id="tel" name="tel" value="{{ user.profile.tel }}">
+                        <br/>例：03-1234-5678
+                        <span id="tel-req" class="violation required-violation" style="display:none ;">・入力必須項目です。</span>
+                        <span id="tel-format" class="violation format-violation" style="display:none ;">・電話番号の形式が不正です。</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="email">
+                            メールアドレス
+                        </label>
+                    </th>
+                    <td>
+                        <input class="input" type="email" id="email" name="email" value="{{ user.profile.email }}" readonly>
+                        <br>※メールアドレスは変更できません。
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="password">
+                            パスワード
+                        </label>
+                    </th>
+                    <td>
+                        <a id="change-password" href="{% url 'password_change' %}">パスワードを変更する</a>
+                        <span id="cant-change" style="display:none ;">********</span>
+                    </td>
+                </tr>
+            </table>
+            <div class="form-button">
+                <a id="js-signup" href="#form" class="check-button">入力内容を確認する</a>
+                <a id="js-signup-mod" href="#form" class="check-button" style="display:none ;">修正</a>
+                <button id="button" class="button" name="signup" type="submit" style="display:none ;" disabled>更新</button>
+                <p id="message" name="message">{{ message }}</p>
+            </div>
+        </form>
+    </section>
+    <script src="{% static 'js/account.js' %}"></script>
+{% endblock %}
