@@ -1,0 +1,18 @@
+{% load humanize %}
+<article class="product-card">
+    <a href="{% url 'app:Detail' product.id %}" class="card-link">
+        <dl class="feature">
+            {% if product.stock == 0 %}
+            <label class="feature-label">品切れ</label>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <div class="like-outer">
+                {% include "like.html" %}
+            </div>
+            {% endif %}
+            <img class="feature-img" src="{{ product.image.url }}" width="200" height="120" alt="{{ product.name }}">
+            <dt class="feature-headline">{{ product.name }}</dt>
+            <dd class="product-value">税込{{ product.price|intcomma:False }}円</dd>
+        </dl>
+    </a>
+</article>

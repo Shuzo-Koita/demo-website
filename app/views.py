@@ -1,9 +1,10 @@
+from itertools import product
 from multiprocessing import context
 from re import T
 from unicodedata import category
 from django.views.generic import TemplateView, ListView, DetailView
-from .models import Post, Product, Profile
-from django.shortcuts import render,redirect
+from .models import Post, Product, Profile, LikeForProduct
+from django.shortcuts import get_object_or_404,render,redirect
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
@@ -17,7 +18,8 @@ from django.contrib.auth.forms import (
 from django.contrib.auth.views import (
     LoginView, LogoutView
 )
-# import uuid
+from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage,InvalidPage
 
 User = get_user_model()
 
@@ -64,16 +66,68 @@ class ContactCompleteView(TemplateView):
         ctxt["subtitle"] = " | お問い合わせ完了"
         return ctxt
 
-class WholeCake(ListView):
-    template_name = "product_list.html"
-    queryset = Product.objects.filter(category=2,available=True)
-    ordering = '-updated'
-    paginate_by = 9
-    def get_context_data(self):
-        ctxt = super().get_context_data()
-        ctxt["subtitle"] = " | ホールケーキ"
-        ctxt["headline"] = "ホールケーキ"
-        return ctxt
+# class WholeCake(ListView):
+#     template_name = "product_list.html"
+#     queryset = Product.objects.filter(category=2,available=True)
+#     ordering = '-updated'
+#     paginate_by = 9
+#     def get_context_data(self):
+#         ctxt = super().get_context_data()
+#         ctxt["subtitle"] = " | ホールケーキ"
+#         ctxt["headline"] = "ホールケーキ"
+#         return ctxt
+
+def WholeCake(request):
+    products = Product.objects.filter(category=2,available=True)
+    liked_list = []
+    user=request.user
+    if user.is_authenticated:
+        for product in products:
+            liked = product.likeforproduct_set.filter(user=request.user)
+            if liked.exists():
+                liked_list.append(product.id)
+    #ページネーションの実装
+    count = 9
+    paginator = Paginator(products, count)
+    try:
+        page = int(request.GET.get('page','1'))
+    except:
+        page = 1
+    try:
+        products = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        products = paginator.page(paginator.num_pages)
+    # csrf_token = request.GET.get('csrfmiddlewaretoken')
+    context = {
+        'liked_list': liked_list,
+        'subtitle': ' | ホールケーキ',
+        'headline': 'ホールケーキ',
+        'products': products,
+        # 'csrf_token':csrf_token,
+        'count':count,
+    }
+    return render(request, 'product_list.html', context)
+
+def LikeView(request):
+    user = request.user
+    if request.method =="POST" and user.is_authenticated:
+        product = get_object_or_404(Product, pk=request.POST.get('product_id'))
+        liked = False
+        like = LikeForProduct.objects.filter(product=product, user=user)
+        if like.exists():
+            like.delete()
+        else:
+            like.create(product=product, user=user)
+            liked = True
+    
+        context={
+            'product_id': product.id,
+            'liked': liked,
+            'count': product.likeforproduct_set.count(),
+        }
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse(context)
 
 class Index(ListView):
     template_name = "index.html"
@@ -237,35 +291,160 @@ class AccountCompleteView(TemplateView):
         ctxt["subtitle"] = " | アカウント情報更新完了"
         return ctxt
 
-class RollCake(ListView):
-    template_name = "product_list.html"
-    queryset = Product.objects.filter(category=3,available=True)
-    ordering = '-updated'
-    paginate_by = 9
-    def get_context_data(self):
-        ctxt = super().get_context_data()
-        ctxt["subtitle"] = " | ロールケーキ"
-        ctxt["headline"] = "ロールケーキ"
-        return ctxt
+# class RollCake(ListView):
+#     template_name = "product_list.html"
+#     queryset = Product.objects.filter(category=3,available=True)
+#     ordering = '-updated'
+#     paginate_by = 9
+#     def get_context_data(self):
+#         ctxt = super().get_context_data()
+#         ctxt["subtitle"] = " | ロールケーキ"
+#         ctxt["headline"] = "ロールケーキ"
+#         return ctxt
 
-class CupCake(ListView):
-    template_name = "product_list.html"
-    queryset = Product.objects.filter(category=4,available=True)
-    ordering = '-updated'
-    paginate_by = 9
-    def get_context_data(self):
-        ctxt = super().get_context_data()
-        ctxt["subtitle"] = " | マフィン"
-        ctxt["headline"] = "マフィン"
-        return ctxt
+def RollCake(request):
+    products = Product.objects.filter(category=3,available=True)
+    liked_list = []
+    user=request.user
+    if user.is_authenticated:
+        for product in products:
+            liked = product.likeforproduct_set.filter(user=request.user)
+            if liked.exists():
+                liked_list.append(product.id)
+    #ページネーションの実装
+    count = 9
+    paginator = Paginator(products, count)
+    try:
+        page = int(request.GET.get('page','1'))
+    except:
+        page = 1
+    try:
+        products = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        products = paginator.page(paginator.num_pages)
+    # csrf_token = request.GET.get('csrfmiddlewaretoken')
+    context = {
+        'liked_list': liked_list,
+        'subtitle': ' | ロールケーキ',
+        'headline': 'ロールケーキ',
+        'products': products,
+        # 'csrf_token':csrf_token,
+        'count':count,
+    }
+    return render(request, 'product_list.html', context)
 
-class Cookie(ListView):
-    template_name = "product_list.html"
-    queryset = Product.objects.filter(category=5,available=True)
-    ordering = '-updated'
-    paginate_by = 9
-    def get_context_data(self):
-        ctxt = super().get_context_data()
-        ctxt["subtitle"] = " | クッキー"
-        ctxt["headline"] = "クッキー"
-        return ctxt
+# class CupCake(ListView):
+#     template_name = "product_list.html"
+#     queryset = Product.objects.filter(category=4,available=True)
+#     ordering = '-updated'
+#     paginate_by = 9
+#     def get_context_data(self):
+#         ctxt = super().get_context_data()
+#         ctxt["subtitle"] = " | マフィン"
+#         ctxt["headline"] = "マフィン"
+#         return ctxt
+
+def CupCake(request):
+    products = Product.objects.filter(category=4,available=True)
+    liked_list = []
+    user=request.user
+    if user.is_authenticated:
+        for product in products:
+            liked = product.likeforproduct_set.filter(user=request.user)
+            if liked.exists():
+                liked_list.append(product.id)
+    #ページネーションの実装
+    count = 9
+    paginator = Paginator(products, count)
+    try:
+        page = int(request.GET.get('page','1'))
+    except:
+        page = 1
+    try:
+        products = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        products = paginator.page(paginator.num_pages)
+    # csrf_token = request.GET.get('csrfmiddlewaretoken')
+    context = {
+        'liked_list': liked_list,
+        'subtitle': ' | マフィン',
+        'headline': 'マフィン',
+        'products': products,
+        # 'csrf_token':csrf_token,
+        'count':count,
+    }
+    return render(request, 'product_list.html', context)
+
+# class Cookie(ListView):
+#     template_name = "product_list.html"
+#     queryset = Product.objects.filter(category=5,available=True)
+#     ordering = '-updated'
+#     paginate_by = 9
+#     def get_context_data(self):
+#         ctxt = super().get_context_data()
+#         ctxt["subtitle"] = " | クッキー"
+#         ctxt["headline"] = "クッキー"
+#         return ctxt
+
+def Cookie(request):
+    products = Product.objects.filter(category=5,available=True)
+    liked_list = []
+    user=request.user
+    if user.is_authenticated:
+        for product in products:
+            liked = product.likeforproduct_set.filter(user=request.user)
+            if liked.exists():
+                liked_list.append(product.id)
+    #ページネーションの実装
+    count = 9
+    paginator = Paginator(products, count)
+    try:
+        page = int(request.GET.get('page','1'))
+    except:
+        page = 1
+    try:
+        products = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        products = paginator.page(paginator.num_pages)
+    # csrf_token = request.GET.get('csrfmiddlewaretoken')
+    context = {
+        'liked_list': liked_list,
+        'subtitle': ' | クッキー',
+        'headline': 'クッキー',
+        'products': products,
+        # 'csrf_token':csrf_token,
+        'count':count,
+    }
+    return render(request, 'product_list.html', context)
+
+def favorite(request):
+    products = Product.objects.all()
+    liked_list = []
+    user=request.user
+    if user.is_authenticated:
+        for product in products:
+            liked = product.likeforproduct_set.filter(user=request.user)
+            if liked.exists():
+                liked_list.append(product.id)
+    products = Product.objects.filter(id__in= liked_list)
+    #ページネーションの実装
+    count = 9
+    paginator = Paginator(products, count)
+    try:
+        page = int(request.GET.get('page','1'))
+    except:
+        page = 1
+    try:
+        products = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        products = paginator.page(paginator.num_pages)
+    # csrf_token = request.GET.get('csrfmiddlewaretoken')
+    context = {
+        'liked_list': liked_list,
+        'subtitle': ' | お気に入り',
+        'headline': 'お気に入り',
+        'products': products,
+        # 'csrf_token':csrf_token,
+        'count':count,
+    }
+    return render(request, 'product_list.html', context)

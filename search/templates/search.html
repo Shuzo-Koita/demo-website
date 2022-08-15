@@ -9,7 +9,7 @@
     <h1 class="section-headline">検索結果</h1>
     <div>
         <p class="text-center my_search_text">検索キーワード: <b>"{{ query }}"</b>
-        <br><b>{{search_count}}</b>件該当 {{ count }}件ずつ表示
+        <br><b>{{search_count}}</b>件該当
         {% if products.paginator.num_pages > 1 %}
             <br>{{ products.paginator.num_pages }}ページ中の<b>{{ products.number }}</b>ページ目
         {% endif %}
@@ -18,18 +18,7 @@
     <div class="product">
         <div class="product-inner">
             {% for product in products %}
-            <article class="product-card">
-                <a href="{{product.get_url}}" class="card-link"></a>
-                <dl class="feature">
-                    {% if product.stock == 0 %}
-                    <label class="detail-label">品切れ</label>
-                    {% endif %}
-                    <img class="feature-img" src="{{ product.image.url }}" width="200" height="120" alt="{{ product.name }}">
-                    <dt class="feature-headline">{{ product.name }}</dt>
-                    <dd class="product-value">税込{{ product.price| intcomma }}円</dd>
-                </dl>
-                </a>
-            </article>
+            {% include "_product_card.html" %}
         {% empty %}
         <div class="">
             <p class="text-center my_search_text">商品が見つかりませんでした。他のキーワードで、再検索してください。</p>
@@ -40,40 +29,7 @@
         </div>
     </div>
 </section>
-
-{% if products.paginator.num_pages > 1 %}
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-    <!-- 「前へ」の部分 -->
-    {% if products.has_previous %}
-        <li class="page-item">
-            <a href="?csrfmiddlewaretoken={{csrf_token}}&q={{query}}&page={{ products.previous_page_number }}">前へ</a>
-        </li>
-    {% endif %}
-
-    <!-- 数字部分 -->
-    {% for num in products.paginator.page_range %}
-        <li class="page-item">
-        {% if products.number == num %}
-            <span>{{ num }}</span>
-        {% else %}
-            <a href="?csrfmiddlewaretoken={{csrf_token}}&q={{query}}&page={{ num }}">{{ num }}</a>
-        {% endif %}
-        </li>
-    {% endfor %}
-
-    <!-- 「次へ」 の部分 -->
-    {% if products.has_next %}
-        <li class="page-item">
-            <a href="?csrfmiddlewaretoken={{csrf_token}}&q={{query}}&page={{ products.next_page_number }}">次へ</a>
-        </li>
-    {% endif %}
-  <!-- {% for pg in products.paginator.page_range %}
-  <a href="?csrfmiddlewaretoken={{csrf_token}}&q={{query}}&page={{pg}}">{{pg}}</a>
-  {% endfor %} -->
-    </ul>
-</nav>
-{% endif %}
+{% include "_pagination2.html" %}
 <div class="topicsList">
     <div class="topicsList-left">
     </div>
@@ -81,4 +37,30 @@
         <p class="page_top"><a href="#page_top" class="page_top_btn">↑このページの先頭へ</a></p>
     </div>
 </div>
+{% if user.is_authenticated %}
+<script type="text/javascript">
+    $(document).ready(function(event){
+        $(document).on('click', '#like', function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'app:like' %}",
+                data: {
+                    'product_id': $(this).attr('name'),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: 'json',
+                success: function(response){
+                    selector = document.getElementsByName(response.product_id);
+                    if(response.liked){
+                        $(selector).html("<img class=\"fas\" src=\"{% static 'images/like2.png' %}\" width=\"20px\" height=\"20px\">");
+                    }
+                    else {
+                        $(selector).html("<img class=\"fas\" src=\"{% static 'images/like1.png' %}\" width=\"20px\" height=\"20px\">");
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

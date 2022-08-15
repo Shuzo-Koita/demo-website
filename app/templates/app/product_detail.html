@@ -8,6 +8,11 @@
             <label class="detail-label">品切れ</label>
             {% endif %}
             <img src="{{ object.image.url }}" width="300" height="180" alt="{{ object.name }}"> 
+            <!-- {% if user.is_authenticated %}
+            <div class="like-outer">
+                {% include "like_detail.html" %}
+            </div>
+            {% endif %} -->
             {% if object.stock > 0 %}
             <a class="detail-cart" href="{% url 'cart:add_cart' product.id %}">カートに追加する</a>
             {% else %}
@@ -35,5 +40,37 @@
         </div>
     </div>
     <hr class="navbar-hr">
-
+    {% if user.is_authenticated %}
+    <script type="text/javascript">
+        $(document).ready(function(event){
+            $(document).on('click', '#like_detail', function(event){
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'app:like' %}",
+                    data: {
+                        'product_id': $(this).attr('name'),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    dataType: 'json',
+                    success: function(response){
+                        selector = document.getElementsByName(response.product_id);
+                        if(response.liked){
+                            $(selector).html("<img class=\"fas\" src=\"{% static 'images/like2.png' %}\" width=\"20px\" height=\"20px\"> お気に入り解除");
+                        }
+                        else {
+                            $(selector).html("<img class=\"far\" src=\"{% static 'images/like1.png' %}\" width=\"20px\" height=\"20px\"> お気に入りに追加");
+                        }
+                    }
+                });
+            });
+        });
+            // selector = document.getElementsByName(response.product_id);
+            // if(response.liked){
+            //     $(selector).html("<img class=\"fas\" src=\"{% static 'images/like2.png' %}\" width=\"20px\" height=\"20px\"> お気に入り解除");
+            // }
+            // else {
+            //     $(selector).html("<img class=\"far\" src=\"{% static 'images/like1.png' %}\" width=\"20px\" height=\"20px\"> お気に入りに追加");
+            // }
+    </script>
+    {% endif %}
 {% endblock %}

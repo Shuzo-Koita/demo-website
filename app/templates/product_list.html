@@ -7,24 +7,17 @@
     <h1 class="section-headline">{{ headline }}</h1>
     <div class="product">
         <div class="product-inner">
-    {% for post in object_list %}
-            <article class="product-card">
-                <a href="{% url 'app:Detail' post.id %}" class="card-link">
-                    <dl class="feature">
-                        {% if post.stock == 0 %}
-                        <label class="detail-label">品切れ</label>
-                        {% endif %}
-                        <img class="feature-img" src="{{ post.image.url }}" width="200" height="120" alt="{{ post.name }}">
-                        <dt class="feature-headline">{{ post.name }}</dt>
-                        <dd class="product-value">税込{{ post.price| intcomma }}円</dd>
-                    </dl>
-                </a>
-            </article>
+    {% for product in products %}
+    {% include "_product_card.html" %}
+    {% empty %}
+    <div class="">
+        <p class="text-center my_search_text">{{ headline }}の商品がありません。</p>
+    </div>
     {% endfor %}
         </div>
     </div>
 </section>
-{% include "_pagination.html" %}
+{% include "_pagination2.html" %}
 <div class="topicsList">
     <div class="topicsList-left">
     </div>
@@ -32,4 +25,30 @@
         <p class="page_top"><a href="#page_top" class="page_top_btn">↑このページの先頭へ</a></p>
     </div>
 </div>
+{% if user.is_authenticated %}
+<script type="text/javascript">
+    $(document).ready(function(event){
+        $(document).on('click', '#like', function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'app:like' %}",
+                data: {
+                    'product_id': $(this).attr('name'),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: 'json',
+                success: function(response){
+                    selector = document.getElementsByName(response.product_id);
+                    if(response.liked){
+                        $(selector).html("<img class=\"fas\" src=\"{% static 'images/like2.png' %}\" width=\"20px\" height=\"20px\">");
+                    }
+                    else {
+                        $(selector).html("<img class=\"fas\" src=\"{% static 'images/like1.png' %}\" width=\"20px\" height=\"20px\">");
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

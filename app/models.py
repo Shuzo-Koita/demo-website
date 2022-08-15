@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(
@@ -95,6 +96,12 @@ class Product(models.Model):
  
     def __str__(self):
         return '{}'.format(self.name)
+
+class LikeForProduct(models.Model):
+    """投稿に対するいいね"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

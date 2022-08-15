@@ -6,7 +6,6 @@ from . import models
 class CategoryAdmin(admin.ModelAdmin):
     pass
 
-
 @admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
     pass
@@ -21,5 +20,9 @@ class ProductAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(models.Profile)
-class ProductAdmin(admin.ModelAdmin):
+class ProfileAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.LikeForProduct)
+class LikeAdmin(admin.ModelAdmin):
     pass

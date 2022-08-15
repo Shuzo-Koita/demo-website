@@ -426,7 +426,14 @@ recomend
     margin: 0;
     text-align: left;
 }
-
+.feature-label {
+    position: absolute;
+    left: 15px;
+    color: #fff;
+    background-color: red;
+    padding: 5px 10px;
+    cursor: default;
+}
 /* 
 contact 
 */
@@ -505,6 +512,7 @@ form
     padding: 17px 15px 15px 15px;
     text-align: right;
     vertical-align: top;
+    width: 190px;
 }
 
 .form-table td {
@@ -711,6 +719,23 @@ Cart Page
     list-style-position:inside;
 }
 
+/* 
+favorite
+*/
+#like {
+    background-color: #fff;
+    border: 1px dotted #ccc;
+    position: absolute; 
+    right: 15px;
+}
+#like_detail {
+    padding: 5px 5px;
+    margin: 10px;
+    width: 180px;
+    border: 1px solid #555  ;
+    border-radius: 5px;
+}
+
 @media screen and (max-width: 768px) {
     body {
         font-size: 14px;
@@ -795,7 +820,7 @@ Cart Page
         margin: auto;
     }
     .form-table {
-        margin: 0 5% 0 10%;
+        margin: 0 5% 0 5%;
     }
     .form-table th {
         padding: 17px 0 15px 15px;

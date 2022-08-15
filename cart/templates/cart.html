@@ -51,16 +51,16 @@
                             <br>
                             SKU: {{cart_item.product.id}}
                             <br>
-                            単価(税込): {{cart_item.product.price| intcomma }}円
+                            単価(税込): {{cart_item.product.price| intcomma:False }}円
                             <br>
-                            個数: {{cart_item.quantity}} x {{cart_item.product.price| intcomma }}円
+                            個数: {{cart_item.quantity}} x {{cart_item.product.price| intcomma:False }}円
                         </p>
                     </td>
                     <td>
                         <p class="text-center">
                             【小計(税込)】
                             <br>
-                            <b>{{cart_item.sub_total| intcomma }}円</b>
+                            <b>{{cart_item.sub_total| intcomma:False }}円</b>
                         </p>
                     </td>
                     <td class="td">
@@ -111,7 +111,7 @@
                 </tr>
                 <tr class="tr">
                     <td class="td">
-                        <p>商品の小計: <strong>{{ total| intcomma }}円</strong>
+                        <p>商品の小計: <strong>{{ total| intcomma:False }}円</strong>
                         <br>
                         <span class="small">※上記値段に送料は含まれていません。</span></p>
                     </td>
