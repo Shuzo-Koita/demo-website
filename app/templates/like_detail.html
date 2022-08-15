@@ -1,9 +1,9 @@
 {% load static %}
 <form action="" method="POST">
     {% csrf_token %}
-    {% if product.id in liked_list %}
-        <button id="like_detail" name="{{product.id}}"><img class="fas" src="{% static 'images/like2.png' %}" width="20px" height="20px"> お気に入り解除</button>
+    {% if object.id in liked_list %}
+        <button id="like_detail" name="{{object.id}}"><img class="fas" src="{% static 'images/like2.png' %}" width="20px" height="20px"> お気に入り解除</button>
     {% else %}
-        <button id="like_detail" name="{{product.id}}"><img class="far" src="{% static 'images/like1.png' %}" width="20px" height="20px"> お気に入りに追加</button>      
+        <button id="like_detail" name="{{object.id}}"><img class="far" src="{% static 'images/like1.png' %}" width="20px" height="20px"> お気に入りに追加</button>      
     {% endif %}
 </form>

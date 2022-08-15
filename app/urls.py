@@ -8,10 +8,10 @@ app_name='app'
 
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
-    path('whole/', views.WholeCake),
-    path('roll/', views.RollCake),
-    path('cup/', views.CupCake),
-    path('cookie/', views.Cookie),
+    path('whole/', views.WholeCake.as_view()),
+    path('roll/', views.RollCake.as_view()),
+    path('cup/', views.CupCake.as_view()),
+    path('cookie/', views.Cookie.as_view()),
     path('favorite/', views.favorite),
     path('contact/', ContactView.as_view(),name = "contact"),
     path('contact/complete/', ContactCompleteView.as_view()),

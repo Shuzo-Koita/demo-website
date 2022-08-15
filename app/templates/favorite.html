@@ -7,7 +7,7 @@
     <h1 class="section-headline">{{ headline }}</h1>
     <div class="product">
         <div class="product-inner">
-    {% for product in object_list %}
+    {% for product in products %}
     {% include "_product_card.html" %}
     {% empty %}
     <div class="">
@@ -17,7 +17,7 @@
         </div>
     </div>
 </section>
-{% include "_pagination.html" %}
+{% include "_pagination2.html" %}
 <div class="topicsList">
     <div class="topicsList-left">
     </div>
